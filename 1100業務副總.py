@@ -1,3 +1,5 @@
+# 判斷是否需要經過「業務副總」簽核關卡
+
 # 業務企劃中心不經過此關卡
 if plevel == 6: #業務企劃中心
     return False
@@ -23,7 +25,7 @@ if nlevel==100 and vaid==21 and hours<8:#一般人員申請遞延休假小於8HR
     return False
 
 # 職級在副單位主管(含)以下 (nlevel<=750)，且非屬一廠、二廠、工務副總督導，
-# 申請公出 (4)、公假(本廠公務) (7)、或各類補休 (35, 36, 37, 38, 109, 110, 111) 不進入此關卡
+# 申請公出 (4)、公假(本廠公務) (7)、或各類補休 (35加班, 36出差, 37值班, 38公務, 109行政值班, 110電機值班, 111警衛幹部值班) 不進入此關卡
 if nlevel<=750 and plevel!=1 and plevel!=2 and plevel!=3 and (vaid==4 or vaid==7 or vaid==35 or vaid==36 or vaid==37 or vaid==38 or vaid==109 or vaid==110 or vaid==111):
     return False
 
@@ -32,8 +34,9 @@ if plevel==3 and vaid==6:
     return False
 
 # 職級在副單位主管(含)以下 (nlevel<=750)，且非屬一廠、二廠、工務副總督導，
-# 只要「不屬於」一般較短天數之假別 (公出、公假(本廠公務)、各類補休、休假、遞延休假、事假、病假)，
-# 或者 (請假時數大於8小時 或 連續天數大於1天)，就需要業務副總審核
+# 只要「不屬於」一般較短天數之假別 (公出4/公假(本廠)7/各類補休/休假20/遞延休假21/事假12/病假14)，
+# 「或者」請假時數 > 8 小時，
+# 「或者」連續請假天數 > 1 天，就需要業務副總審核
 if nlevel<=750 and plevel!=1 and plevel!=2 and plevel!=3 and (not (vaid==4 or vaid==7 or vaid==35 or vaid==36 or vaid==37 or vaid==38 or vaid==109 or vaid==110 or vaid==111 or vaid==20 or vaid==21 or vaid==12 or vaid==14) or (hours>8 or continueDays>1) ):
     return True
 
