@@ -1,13 +1,28 @@
 # 【單位主官 審核邏輯】
 
+# === 強制跳過 (Quick Fail) ===
+
 # --- 全局排除條件 ---
 # 已簽准之公假(7)不需主官審核
 if vaid==7:
     return False
 
 # 單位主管(800)含以上者，不需單位主官審核 (僅審核副單位主管750以下)
-if nlevel>=800: 
+if nlevel>=800:
     return False
+
+# --- 特殊排除條件 (單日或短時數特定假別) ---
+# 針對一廠或二廠(plevel=1,2)，副組長/副課長以下(nlevel<=650)
+# 若是請「單日以內」的事假12/休假20/病假14，或公出4/公假7/各種補休，則跳過主官審核
+if plevel in (1, 2) and nlevel<=650 and ((vaid in (12, 14, 20) and hours<=8) or vaid in (4, 7, 35, 36, 37, 38, 109, 110, 111)) and continueDays<=1:
+    return False
+
+# 針對秘書室(master=2)或人事組長群組(master=4)，組長/課長以下(nlevel<=700)
+# 若是請「單日以內」的事假12/休假20/病假14，或公出4/公假7/各種補休，則跳過主官審核
+if master in (2, 4) and nlevel<=700 and ((vaid in (12, 14, 20) and hours<=8) or vaid in (4, 7, 35, 36, 37, 38, 109, 110, 111)) and continueDays<=1:
+    return False
+
+# === 進入條件 ===
 
 # --- 特定部門/流程強制審核條件 ---
 # 製證中心組流程設定-資通機電 (secondDept=3) 且 職級為單位主管以下 (<800) 者，需審核
@@ -36,17 +51,6 @@ if linkuncheng==1:
 # 若請假超過一天 (hours>8 或 continueDays>1 的事假12/休假20/病假14)，或屬於特定假別(公出4/公假7/各種補休35-38/109-111)，需審核
 if plevel in (1, 2) and master==1 and nlevel<=650 and ((vaid in (12, 14, 20) and hours>8) or vaid in (4, 7, 35, 36, 37, 38, 109, 110, 111) or continueDays>1):
     return True
-
-# --- 特殊排除條件 (單日或短時數特定假別) ---
-# 針對一廠或二廠(plevel=1,2)，副組長/副課長以下(nlevel<=650)
-# 若是請「單日以內」的事假12/休假20/病假14，或公出4/公假7/各種補休，則跳過主官審核
-if plevel in (1, 2) and nlevel<=650 and ((vaid in (12, 14, 20) and hours<=8) or vaid in (4, 7, 35, 36, 37, 38, 109, 110, 111)) and continueDays<=1:
-    return False
-
-# 針對秘書室(master=2)或人事組長群組(master=4)，組長/課長以下(nlevel<=700)
-# 若是請「單日以內」的事假12/休假20/病假14，或公出4/公假7/各種補休，則跳過主官審核
-if master in (2, 4) and nlevel<=700 and ((vaid in (12, 14, 20) and hours<=8) or vaid in (4, 7, 35, 36, 37, 38, 109, 110, 111)) and continueDays<=1:
-    return False
 
 # 通過所有排除與特定審核條件後，預設進入單位主官審核
 return True
