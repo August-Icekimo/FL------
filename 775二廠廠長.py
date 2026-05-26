@@ -1,3 +1,9 @@
+# 判斷是否需要經過「二廠廠長」簽核關卡
+
+# 若申請人職級為「單位主管」(800) 且 簽核部門為「數位身分識別證製作中心」(7)
+# 則須經過二廠廠長簽核
 if nlevel == 800 and plevel == 7:
-       return True
+    return True
+
+# 預設跳過此關卡
 return False
