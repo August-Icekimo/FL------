@@ -1,8 +1,4 @@
-# --- 不予審核條件 (Quick Fall / 排除條件) ---
-
-# 跳過總經理室(master=4) 13等以上人員(rankAbove13=1)
-if master == 4 and rankAbove13 == 1:
-    return False
+# --- 預設不予審核 ---
 
 # --- 進入審核條件 (Quick Pass) ---
 
@@ -14,7 +10,11 @@ if nlevel <= 750 and (second == 3 or onlySecond == 2 or secondDept == 1):
 if nlevel < 750 and plevel == 2:
     return True
 
-# --- 預設不予審核 ---
+# --- 不予審核條件 (Quick Fall / 排除條件) ---
+
+# 跳過總經理室(master=4) 13等以上人員(rankAbove13=1)
+if master == 4 and rankAbove13 == 1:
+    return False
 
 # 若上述條件皆不滿足，預設跳過此關卡
 return False
