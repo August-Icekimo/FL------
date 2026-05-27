@@ -8,7 +8,6 @@ if nlevel <= 750:
     return True
 
 # --- 不予審核條件 (Quick Fall / 排除條件) ---
-
 # 排除來自「第一工廠 (1)」或「第二工廠 (2)」且職級在「副單位主管及以上 (nlevel >= 750)」的人員。
 if plevel in (1, 2) and nlevel >= 750:
     return False
