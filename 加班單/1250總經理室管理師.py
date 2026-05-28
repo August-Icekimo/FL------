@@ -1,7 +1,6 @@
-if nlevel<=750 and (plevel==3):#plevel非工廠的督導單位  750為課長級
-    return True
-if nlevel<750 and (plevel==1 or plevel==2):#plevel 1第一工廠 2第二工廠
-    return True
-if plevel==6:#業務企劃中心
-   return True
-return False
+# 若申請人為 13職等以上人員(rankAbove13=1)，跳過此關卡
+if rankAbove13 == 1:
+    return False
+
+# 預設行為：其他情況皆需經過總經理室管理師審核
+return True
