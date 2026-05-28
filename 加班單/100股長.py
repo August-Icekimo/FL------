@@ -1,3 +1,3 @@
-if nlevel==100:
-    return True
-return False
+# 檢查申請人是否為「一般人員」 (職級代碼 nlevel == 100)
+# 若為一般人員，則請假單/加班單需經過「股長」關卡簽核
+return nlevel == 100

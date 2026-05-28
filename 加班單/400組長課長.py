@@ -1,4 +1,4 @@
-#簽核層級<組長/課長 且非總經理室4
-if nlevel<700 and master!=4:
-    return True
-return False
+# 檢查申請人職級是否低於「組長/課長」 (nlevel < 700)
+# 且人員所屬主要群組非「總經理室人員」 (master != 4)
+# 若符合上述條件，則表單需經過「組長/課長」關卡簽核
+return nlevel < 700 and master != 4

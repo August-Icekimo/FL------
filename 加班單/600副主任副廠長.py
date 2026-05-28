@@ -1,7 +1,5 @@
-# 審核 非二廠人員
-if second!=2:
-    return False
-# 審核 副單位主管以下人員
-if nlevel<750:
-    return True
-return False
+# 與 500副主任副廠長.py 的邏輯互補
+# 檢查申請人員的「副督導群組」是否為「副主任2督導」 (second == 2，即二廠相關人員)
+# 並且申請人的職級為「副單位主管」以下 (nlevel < 750)
+# 若符合上述條件，則表單需經過此「副主任/副廠長」關卡簽核
+return second == 2 and nlevel < 750

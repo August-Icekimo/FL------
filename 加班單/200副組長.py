@@ -1,3 +1,4 @@
-if nlevel<650 and plevel!=1 and plevel!=2:
-    return True
-return False
+# 檢查申請人職級是否低於「副組長/副課長」 (nlevel < 650，例如 500 股長、100 一般人員)
+# 且簽核部門非「第一工廠」 (plevel != 1) 且非「第二工廠」 (plevel != 2)
+# 若符合上述條件，則表單需經過「副組長」關卡簽核
+return nlevel < 650 and plevel not in (1, 2)
