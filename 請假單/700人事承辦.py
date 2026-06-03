@@ -12,17 +12,18 @@ if vaid in (117, 118, 119, 120):
 if vaid==67 and not (second==3 or onlySecond==2 or secondDept==1):#非二廠工會假單
     return True
 
-# --- 針對特定職級與假別的審核條件 ---
-# 非第二工廠(plevel!=2) 的組長/課長以下(nlevel<=700)，若申請公務(6)，則進入審核
-if plevel!=2 and nlevel<=700 and vaid==6:
-    return True
-
 # --- 總廠人員~~非一/二廠~~ 副主管以下 長天數或特殊假別審核 ---
 # 副主管以下(nlevel<=750) 且 總廠人員(3, 4)~~非第一/第二工廠 (plevel!=1,2)~~ ：
 # 若申請「非」排除清單(公出/公假/補休/休假/遞休/事假/病假) 的 特殊假別
 # 或 請假超過一天 (hours>8 或 continueDays>1)，則進入審核
 if nlevel<=750 and plevel in (3, 4) and (vaid not in (4, 12, 14, 20, 21, 35, 36, 37, 38, 109, 110, 111) or hours>8 or continueDays>1): 
     return True
+
+# --- 針對特定職級與假別的審核條件 ---
+# 非第二工廠(plevel!=2) 的組長/課長以下(nlevel<=700)，若申請公務(6)，則進入審核
+if nlevel<=700 and vaid==6:
+    if plevel!=2:
+        return True
 
 # === 排除條件 ===
 

@@ -7,15 +7,16 @@
 if vaid==67 and (second==3 or onlySecond==2 or secondDept==1):#工會假單->二廠人事
     return True
 
+# 第二工廠(plevel=2) 或 二廠人事業務範圍(second=3) 的 組長/課長以下(nlevel<=700)，若申請公務(6)，則進入審核
+if vaid==6:
+  if (plevel==2 or second==3) and nlevel<=700:
+    return True
+
 # 業務企劃中心(plevel=6)：
 # 若申請「非」排除清單(公出/公假/各種補休/休假/事假/病假) 的 特殊假別
 # 或 請假超過一天 (hours>8 或 continueDays>1)，則交由二廠人事審核
 if plevel == 6 and (vaid not in (4, 7, 35, 36, 37, 38, 109, 110, 111, 20, 12, 14) or (hours>8 or continueDays>1)):#業務企劃中心
     return True
-
-# 第二工廠(plevel=2) 或 二廠人事業務範圍(second=3) 的 組長/課長以下(nlevel<=700)，若申請公務(6)，則進入審核
-if (plevel==2 or second==3) and nlevel<=700 and vaid==6:
-  return True
 
 # --- 非一/二廠，但屬於「二廠人事管轄」(外派/特殊單位) 長天數或特殊假別審核 ---
 # 二廠人事業務範圍(second=3) 且 副主管以下(nlevel<=750) 且 非第一/第二工廠 (plevel!=1,2)：
