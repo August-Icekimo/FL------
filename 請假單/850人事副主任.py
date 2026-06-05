@@ -1,43 +1,42 @@
 # 判斷是否需要經過「人事副主任」簽核關卡
 
+# === 假別常數定義（減少重複檢查）===
+# 補休類假別
+vaid_makeups = (35, 36, 37, 38, 109, 110, 111)
+# 常規假別（不需特殊審核）
+vaid_common = (4, 7, 12, 14, 20, 21) + vaid_makeups
+# 公出、公假、補休 - 用於副主管排除
+vaid_exclude_with_makeups = (4, 7) + vaid_makeups
+# 防疫假及會務假
+vaid_meeting_pandemic = (67, 117, 118, 119, 120, 165, 166)
+# 副主管(750)短期假別
+vaid_750_short_term = (12, 15, 20, 21)
+# 快速排除假別（包含公務6）
+vaid_quick_exclude = (5, 6, 7, 21)
+
+# === 快速全局排除（優先執行）===
+if vaid in vaid_quick_exclude or plevel in (1, 2) or nlevel >= 800:
+    return False
+
 # === 強制進入 (Pass Quick) ===
 
-# 若假別為防疫相關假別或工會會務假，必須經過人事副主任簽核
-# 117: (不支薪)防疫照顧假, 118: 防疫病假, 119: 防疫隔離假, 120: (不支薪)疫苗接種假, 67, 165, 166: 會務假
-if vaid in (67, 117, 118, 119, 120, 165, 166):
+# --- 防疫及工會會務假強制進入 ---
+if vaid in vaid_meeting_pandemic:
     return True
 
-# 總廠人員~~非一/二廠~~ 副主管以下：
-# 若假別「非」上述常見免簽假別（公出4/公假(本廠)7/各類補休/休假20/遞延休假21/事假12/病假14），
-# 「或者」請假時數 > 8 小時，
-# 「或者」連續請假天數 > 1 天，則須經過人事副主任簽核
-if nlevel<=750 and plevel in (3, 4) and (vaid not in (4, 7, 12, 14, 20, 21, 35, 36, 37, 38, 109, 110, 111) or hours>8 or continueDays>1):
-    return True
+# --- 副主管以下 + 總廠人員(3,4) 的長天數或特殊假別 ---
+if nlevel <= 750 and plevel in (3, 4):
+    if vaid not in vaid_common or hours > 8 or continueDays > 1:
+        return True
 
 # === 排除條件 ===
 
-# 若假別為公假(本廠公務)(7)、公務(6)、公差(5)、遞延休假(21)，則跳過此關
-if vaid in (5, 6, 7, 21):
+# --- 副單位主管(750) 特定短天數/假別排除 ---
+if nlevel == 750 and ((vaid in vaid_750_short_term and hours <= 8) or vaid in vaid_exclude_with_makeups):
     return False
 
-# 若部門為第一工廠(1)或第二工廠(2)，則跳過此關 (註: 人事副主任主要審核總廠或非一二廠單位)
-if plevel in (1, 2):
-    return False
-
-# 職級在「單位主管」(800)(含)以上者，不經過人事副主任
-if nlevel>=800:
-   return False
-
-# 針對職級為「副單位主管」(750) 的請假條件：
-# 1. 事假(12)、休假(20)、遞延休假(21)、特准病假(15) 且 請假時數 <= 8 小時
-# 2. 公出(4)、公假(本廠公務)(7)、及各類補休 (35加班, 36出差, 37值班, 38公務, 109行政值班, 110電機值班, 111警衛幹部值班)
-# 若符合上述任一條件，跳過人事副主任簽核
-if nlevel==750 and ((vaid in (12, 15, 20, 21) and hours<=8) or vaid in (4, 7, 35, 36, 37, 38, 109, 110, 111)):
-   return False
-
-# 針對職級在「副單位主管」(750)(含)以下，且非第一工廠(1)、第二工廠(2)之人員：
-# 若為公出(4)、公假(本廠公務)(7) 或 各類補休 (35, 36, 37, 38, 109, 110, 111)，跳過人事副主任簽核
-if nlevel<=750 and plevel not in (1, 2) and vaid in (4, 7, 35, 36, 37, 38, 109, 110, 111):
+# --- 非一/二廠副主管以下的補休及公出排除 ---
+if nlevel <= 750 and plevel not in (1, 2) and vaid in vaid_exclude_with_makeups:
     return False
 
 # 預設跳過此關卡
