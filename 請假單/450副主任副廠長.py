@@ -1,46 +1,31 @@
-# 【副主任/副廠長 審核邏輯】
+# 【副主任/副廠長 (督導2) 審核邏輯】 (與 400副主任副廠長 互補)
 
-# === 強制跳過 (Block Quick) ===
+# === 假別常數定義 ===
+# 短期假別（8小時以內）
+vaid_short_term = (12, 14, 20)
+# 公出、公假、補休（短假排除用）
+vaid_short_exclude = (4, 7, 35, 36, 37, 38, 109, 110, 111)
+# 工會假
+vaid_meeting = (67, 165, 166)
 
-# --- 假別與身分直接排除條件 ---
-# 已簽准之公假(7)不需副主任審核
-if vaid==7:
+# === 快速全局排除（優先檢查）===
+# 公假、非指定督導身分、職級過高、一般人員遞延休假短時數、一二廠工會假
+if vaid == 7 or second != 2 or nlevel >= 750 or (nlevel == 100 and vaid == 21 and hours < 8) or (plevel in (1, 2) and vaid in vaid_meeting):
     return False
 
-# 一廠或二廠的工會會務假(67, 165, 166)不需副主任審核
-if plevel in (1, 2) and vaid in (67, 165, 166):
+# 一二廠副組長以下的單日短假
+if plevel in (1, 2) and nlevel <= 650 and continueDays <= 1 and (vaid in vaid_short_term and hours <= 8 or vaid in vaid_short_exclude):
     return False
 
-# 非「副主任2督導」(second!=2)的人員，一律不需審核
-if second!=2: #非指定督導
-   return False
+# === 強制進入條件 ===
 
-# 職級為副單位主管(750)含以上者，不需副主任審核 (僅審核組長/課長以下)
-if nlevel>=750:
-    return False
-
-# --- 時數與天數排除條件 ---
-# 一班人員(100)申請遞延休假(21)小於8小時，不進入審核
-if nlevel==100 and vaid==21 and hours<8:#一般人員申請遞延休假小於8HR不進入
-    return False
-
-# 針對一廠或二廠的副組長/副課長以下(nlevel<=650)人員，若是請「單日或更短(連續天數<=1)」的特定假別，不需副主任審核：
-# 1. 一天以內(時數<=8) 的 事假(12)、休假(20)、病假(14)
-# 2. 或 公出(4)、已簽准公假(7)、各種補休(35-38, 109-111)
-if plevel in (1, 2) and nlevel<=650 and ((vaid in (12, 14, 20) and hours<=8) or vaid in (4, 7, 35, 36, 37, 38, 109, 110, 111)) and continueDays<=1:
-    return False
-
-# === 進入條件 ===
-
-# --- 特定條件直接進入審核 ---
-# 針對一廠或二廠的廠長室人員(master=1)，職級副組長/副課長以下(nlevel<=650)，且屬於「副主任2督導」(second=2)者，只要不是工會會務假(67, 165, 166)，皆需審核
-if plevel in (1, 2) and master==1 and nlevel<=650 and second==2 and vaid not in (67, 165, 166):
+# --- 廠長室人員（非工會假） ---
+if plevel in (1, 2) and master == 1 and nlevel <= 650 and vaid not in vaid_meeting:
     return True
 
-# --- 特殊情況進入審核 ---
-# 工會會務假(67, 165, 166)：若職級為組長/課長(700)，或職級為副組長/副課長(650)且身分標記為「只有副組長(onlySecond=1)」，則需審核
-if vaid in (67, 165, 166) and (nlevel==700 or (nlevel==650 and onlySecond==1)):
+# --- 工會假特定職級 ---
+if vaid in vaid_meeting and (nlevel == 700 or (nlevel == 650 and onlySecond == 1)):
     return True
 
-# 若通過上述所有排除條件，預設進入副主任/副廠長審核
+# 若通過上述所有排除條件，預設進入副主任/副廠長(督導2)審核
 return True
