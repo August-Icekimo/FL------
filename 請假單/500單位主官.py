@@ -27,7 +27,7 @@ if plevel in (1, 2) and nlevel <= 650 and is_short_leave:
     return False
 
 # 總經理室組長以下的單日短假排除
-if master in == 4 and nlevel <= 700 and is_short_leave:
+if master == 4 and nlevel <= 700 and is_short_leave:
     return False
 
 # 預設進入審核 (包含製證中心、政風流程等特定人員)
