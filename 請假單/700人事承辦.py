@@ -13,8 +13,8 @@ vaid_pandemic = (117, 118, 119, 120)
 vaid_quick_exclude = (7, 5, 21)
 
 # === 快速全局排除（優先執行）===
-# 業務企劃中心 或 二廠人員 或 高職級 或 快速排除假別
-if plevel == 6 or second == 3 or plevel == 2 or nlevel >= 800 or vaid in vaid_quick_exclude:
+#  二廠人事業務督導單位 或二廠人員(含廠房、駐警、業務企劃中心)  或 高職級 或 快速排除假別
+if second == 3 or plevel in (2, 5, 6) or nlevel >= 800 or vaid in vaid_quick_exclude:
     return False
 
 # === 強制進入 (Pass Quick) ===
