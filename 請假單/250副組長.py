@@ -1,9 +1,14 @@
-if vaid==7:
+# 公假直接跳過本關卡
+if vaid == 7:
     return False
-if nlevel >= 650  : #副組長以上不進入
+
+# 副組長以上職級直接跳過本關卡
+if nlevel >= 650:
     return False
-if plevel==1 or plevel==2:
-   return False
-#if nlevel==100 and vaid==21 and hours<8:#一般人員申請遞延休假小於8HR不進入
-#    return False
+
+# 第一、二工廠人員直接跳過本關卡
+if plevel == 1 or plevel == 2:
+    return False
+
+# 其他情況進入簽核
 return True
