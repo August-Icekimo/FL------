@@ -9,8 +9,7 @@ vaid_common = (4, 7, 12, 14, 20, 21) + vaid_makeups
 vaid_exclude_with_makeups = (4, 7) + vaid_makeups
 # 快速排除假別
 vaid_quick_exclude = (6, 7)
-# 公差和工會假
-vaid_special_entry = (5, 67, 165, 166)
+
 
 # === 快速全局排除（優先執行）===
 # 部門排除、特定假別或一般人員遞延休假
@@ -18,9 +17,11 @@ if plevel in (1, 2, 3, 6) or vaid in vaid_quick_exclude or (nlevel == 100 and va
     return False
 
 # === 強制進入 (Pass Quick) ===
-
-# --- 公差及工會假（非工務副總督導且低於副總） ---
-if vaid in vaid_special_entry and plevel != 3 and nlevel < 900:
+# --- 公差（業務副總督導的公差） ---
+if plevel == 4 and vaid == 5:
+    return True
+# --- 工會理監事會務假（工務副總督導且低於副總） ---
+if vaid == 67 and plevel == 4 and nlevel < 900:
     return True
 
 # --- 製證中心資通機電的公差 ---

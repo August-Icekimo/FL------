@@ -20,7 +20,7 @@ if vaid in vaid_quick_exclude:
     return False
 
 # 規則2：部門/職級排除（但防疫會務假例外）
-if (plevel in (1, 2) or nlevel >= 800) and vaid not in vaid_meeting_pandemic:
+if (nlevel >= 800) and vaid not in vaid_meeting_pandemic:
     return False
 
 # === 強制進入 (Pass Quick) ===

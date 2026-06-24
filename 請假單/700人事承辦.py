@@ -11,9 +11,11 @@ vaid_exclude_with_makeups = (4, 7) + vaid_makeups
 vaid_pandemic = (117, 118, 119, 120)
 # 快速排除假別
 vaid_quick_exclude = (7, 5, 21)
+# 工會會務假
+vaid_meeting = (67, 165, 166)
 
 # === 快速全局排除（優先執行）===
-#  二廠人事業務督導單位 或二廠人員(含廠房、駐警、業務企劃中心)  或 高職級 或 快速排除假別
+#  二廠人事業務督導單位 或 二廠人員(含廠房、駐警、業務企劃中心)  或 高職級 或 快速排除假別
 if second == 3 or plevel in (2, 5, 6) or nlevel >= 800 or vaid in vaid_quick_exclude:
     return False
 
@@ -24,8 +26,9 @@ if vaid in vaid_pandemic:
     return True
 
 # --- 工會會務假特殊邏輯 ---
-# 理監事會務假(67)：若「非」二廠相關人員，則進入本關審核
-if vaid == 67 and not (second == 3 or onlySecond == 2 or secondDept == 1):
+# 假別中 若「非」二廠相關人員( = 非二廠人事業務範圍、非特定副督導代碼、非各單位派駐二廠名單)，則進入本關審核
+is_second_factory_related = second == 3 or onlySecond == 2 or secondDept == 1
+if vaid in vaid_meeting and not is_second_factory_related:
     return True
 
 # --- 副主管以下 + 總廠人員(3,4) 的特殊審核邏輯 ---

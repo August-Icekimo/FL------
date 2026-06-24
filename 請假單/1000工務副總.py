@@ -11,14 +11,12 @@ vaid_exclude_with_makeups = (4, 7) + vaid_makeups
 vaid_pandemic = (117, 118, 119, 120)
 # 快速排除假別
 vaid_quick_exclude = (5, 6, 7)
-# 工會假
-vaid_meeting = (67, 165, 166)
 # 製證中心資通機電的特殊假別
 special_vaids_3 = (13, 16, 18, 26, 27, 28, 31, 93)
 
 # === 快速全局排除（優先執行）===
-# 工會假或快速排除假別或一般人員遞延休假
-if vaid in vaid_meeting or vaid in vaid_quick_exclude or (nlevel == 100 and vaid == 21 and hours < 8):
+# 快速排除假別或一般人員遞延休假
+if vaid in vaid_quick_exclude or (nlevel == 100 and vaid == 21 and hours < 8):
     return False
 
 # === 強制進入 (Pass Quick) ===
@@ -35,6 +33,11 @@ if plevel == 6 and (hours > 8 or continueDays > 1):
 if plevel == 3 and vaid == 5:
     return True
 
+# --- 工會理監事會務假（工務副總督導+工廠且低於副總） ---
+if vaid == 67 and plevel in (1, 2, 3, 6) and nlevel < 900:
+    return True
+
+# ---
 # --- 製證中心資通機電的特殊假別或長天數 ---
 if secondDept == 3 and nlevel <= 750 and (hours > 8 or continueDays > 1 or vaid in special_vaids_3):
     return True

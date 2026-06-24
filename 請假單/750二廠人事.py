@@ -11,6 +11,8 @@ vaid_exclude_with_makeups = (4, 7) + vaid_makeups
 vaid_quick_exclude = (7, 5, 21)
 # 副主管(750)短期假別
 vaid_750_short_term = (12, 20, 21, 15)
+# 工會會務假
+vaid_meeting = (67, 165, 166)
 
 # === 快速全局排除（優先執行）===
 # 快速排除假別或高職級
@@ -19,9 +21,10 @@ if vaid in vaid_quick_exclude or nlevel >= 800:
 
 # === 強制進入 (Pass Quick) ===
 
-# --- 理監事會務假特殊邏輯 ---
-# vaid=67：若身分屬於二廠相關（second=3 或 派駐二廠），則交由二廠人事審核
-if vaid == 67 and (second == 3 or onlySecond == 2 or secondDept == 1):
+# --- 工會會務假特殊邏輯 ---
+# 若身分屬於二廠相關（second=3 或 派駐二廠），則交由二廠人事審核
+is_second_factory_related = second == 3 or onlySecond == 2 or secondDept == 1
+if vaid in vaid_meeting and is_second_factory_related:
     return True
 
 # --- 公務(6) 審核 ---
