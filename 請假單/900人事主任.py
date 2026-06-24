@@ -15,7 +15,12 @@ vaid_750_short_term = (12, 15, 20, 21)
 vaid_quick_exclude = (5, 6, 7, 21)
 
 # === 快速全局排除（優先執行）===
-if vaid in vaid_quick_exclude or plevel in (1, 2) or nlevel >= 800:
+# 規則1：快速排除假別
+if vaid in vaid_quick_exclude:
+    return False
+
+# 規則2：部門/職級排除（但防疫會務假例外）
+if (plevel in (1, 2) or nlevel >= 800) and vaid not in vaid_meeting_pandemic:
     return False
 
 # === 強制進入 (Pass Quick) ===
