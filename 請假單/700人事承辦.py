@@ -26,9 +26,8 @@ if vaid in vaid_pandemic:
     return True
 
 # --- 工會會務假特殊邏輯 ---
-# 假別中 若「非」二廠相關人員( = 非二廠人事業務範圍、非特定副督導代碼、非各單位派駐二廠名單)，則進入本關審核
-is_second_factory_related = second == 3 or onlySecond == 2 or secondDept == 1
-if vaid in vaid_meeting and not is_second_factory_related:
+# 審核工會會務假假別
+if vaid in vaid_meeting:
     return True
 
 # --- 副主管以下 + 總廠人員(3,4) 的特殊審核邏輯 ---
