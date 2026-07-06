@@ -11,6 +11,8 @@ vaid_exclude_with_makeups = (4, 7) + vaid_makeups
 vaid_pandemic = (117, 118, 119, 120)
 # 快速排除假別
 vaid_quick_exclude = (5, 6, 7)
+# 工會會務假
+vaid_meeting = (67, 165, 166)
 # 製證中心資通機電的特殊假別
 special_vaids_3 = (13, 16, 18, 26, 27, 28, 31, 93)
 
@@ -33,8 +35,8 @@ if plevel == 6 and (hours > 8 or continueDays > 1):
 if plevel == 3 and vaid == 5:
     return True
 
-# --- 工會理監事會務假（工務副總督導+工廠且低於副總） ---
-if vaid == 67 and plevel in (1, 2, 3, 6) and nlevel < 900:
+# --- 工會會務假（工務副總督導+工廠且低於副總） ---
+if vaid in vaid_meeting and plevel in (1, 2, 3, 6) and nlevel < 900:
     return True
 
 # ---
