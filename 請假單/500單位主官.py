@@ -16,9 +16,9 @@ if vaid == 7:
 if nlevel >= 800:
     return False
 
-# 單日內的短假判斷
+# 單日內的短假判斷 (#34 超過一日)
 is_short_leave = continueDays <= 1 and (
-    (vaid in vaid_short_term and hours < 8) or
+    (vaid in vaid_short_term and hours <= 8) or
     vaid in vaid_short_exclude
 )
 
