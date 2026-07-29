@@ -34,6 +34,10 @@ if nlevel <= 750 and plevel in (3, 4):
     if vaid not in vaid_common or hours > 8 or continueDays > 1:
         return True
 
+# --- 育嬰留職停薪假
+if vaid==162:
+    return True
+
 # === 排除條件 ===
 
 # --- 副單位主管(750) 特定短天數/假別排除 ---
